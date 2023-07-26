@@ -1,6 +1,6 @@
 Package: MoleculeExperiment
 Title: Prioritising a molecule-level storage of Spatial Transcriptomics Data
-Version: 1.0.1
+Version: 1.0.2
 Authors@R: c(
     person("Bárbara Zita", "Peters Couto", email = "barbara.zita.peters@couto.de", role = c("aut")),
     person("Nicholas","Robertson", email = "nicholas.robertson@sydney.edu.au", role = c("aut")),
@@ -22,7 +22,6 @@ Imports:
     SpatialExperiment,
     Matrix,
     purrr,
-    sp,
     data.table,
     dplyr (>= 1.1.1),
     magrittr,
@@ -31,7 +30,11 @@ Imports:
     methods,
     terra,
     ggplot2,
-    rlang
+    rlang,
+    cli,
+    EBImage,
+    rhdf5,
+    BiocParallel
 Suggests: 
     knitr,
     BiocStyle,
@@ -40,3 +43,5 @@ VignetteBuilder: knitr
 biocViews: DataImport, DataRepresentation, Infrastructure, Software, Spatial,
     Transcriptomics
 Config/testthat/edition: 3
+Depends: 
+    R (>= 2.10)

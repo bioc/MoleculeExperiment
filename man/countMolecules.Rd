@@ -5,16 +5,17 @@
 \title{Count molecules per region of interest (e.g., cell)}
 \usage{
 countMolecules(
-  object,
+  me,
   moleculesAssay = "detected",
-  segmentationInfo = "boundaries",
   boundariesAssay = "cell",
-  matrixOnly = FALSE
+  buffer = 0,
+  matrixOnly = FALSE,
+  nCores = 1
 )
 }
 \arguments{
-\item{object}{MoleculeExperiment object containing both the transcript data as
-well as the boundaries data. I.e., the "molecules" and "boundaries" slots
+\item{me}{MoleculeExperiment object containing both the transcript data
+as well as the boundaries data. I.e., the "molecules" and "boundaries" slots
 need to be filled. See MoleculeExperiment() for more information.}
 
 \item{moleculesAssay}{Character string naming the list of the molecules slot
@@ -24,18 +25,20 @@ MoleculeExperiment object. It is possible to change it to another mode, e.g.,
 "high_threshold" will access the transcript information that has been stored
 in the "high_threshold" element of the list in the molecules slot.}
 
-\item{segmentationInfo}{Character string specifying the type of segmentation
-information available. Can be either "boundaries" or "masks". Currently,
-only the "boundaries" information is supported.}
-
 \item{boundariesAssay}{Character string naming the list of the boundaries
 slot from which boundary information should be retrieved from.
 For example, for counting transcripts per cell, the list containing the cell
 boundaries (e.g., "cell") should be selected.}
 
+\item{buffer}{Single numeric value (default 0) indicating value to buffer
+beyond segment boundaries, i.e. to count molecules just outside of a segment
+boundary}
+
 \item{matrixOnly}{Logical value indicating whether to return a matrix of the
 counted molecules per segment (e.g., cell). Is FALSE by default, i.e., the
 default output is a SpatialExperiment object.}
+
+\item{nCores}{Number of cores to use for the operation.}
 }
 \value{
 A SpatialExperiment object derived from a MoleculeExperiment object.
@@ -52,7 +55,8 @@ level, one can do so.
 repoDir <- system.file("extdata", package = "MoleculeExperiment")
 repoDir <- paste0(repoDir, "/xenium_V1_FF_Mouse_Brain")
 me <- readXenium(repoDir,
-                  keepCols = "essential")
+    keepCols = "essential"
+)
 
 spe <- countMolecules(me)
 spe
