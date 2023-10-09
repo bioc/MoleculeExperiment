@@ -8,7 +8,7 @@
 An object of class \code{MoleculeExperiment} of length 1.
 }
 \usage{
-small_me
+data(small_me)
 }
 \description{
 A subsetted Xenium dataset include for demostration purposes.

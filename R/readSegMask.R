@@ -9,7 +9,7 @@
 #' @param image The loaded image object, Default: NULL
 #' @param assayName The name of the segmentation (e.g. cell, or nucleus),
 #'     Default: 'cell'
-#' @param background_value The value corrisponding to the backgorund in the
+#' @param background_value The value corresponding to the background in the
 #'     segmentation, Default: NULL
 #' @param sample_id What the sample should be named, Default: NULL
 #' @return A boundaries object.
@@ -22,7 +22,8 @@
 #'     addBoundaries = NULL
 #' )
 #' boundaries(me, "BIDcell_segmentation") <- readSegMask(
-#'     extent(me), # use the molecule extent to define the boundary extent
+#'     # use the molecule extent to define the boundary extent
+#'     extent(me, assayName = "detected"),
 #'     path = segMask, assayName = "BIDcell_segmentation",
 #'     sample_id = "sample1", background_value = 0
 #' )
@@ -31,7 +32,7 @@
 #'         me,
 #'         assayName = "BIDcell_segmentation", fill = NA, colour = "black"
 #'     ) +
-#'     geom_point_me(me, byColour = "feature_name", size = 0.1) +
+#'     geom_point_me(me, byColour = "feature_id", size = 0.1) +
 #'     geom_polygon_me(
 #'         me,
 #'         assayName = "BIDcell_segmentation", fill = NA, colour = "red"
@@ -125,12 +126,19 @@ readSegMask <- function(
     geom_df %<>%
         dplyr::mutate(
             sample_id = ifelse(is.null(sample_id), "sample1", sample_id)
-        ) %>%
-        dplyr::group_by(.data[["geom"]]) %>%
-        dplyr::filter(
-            dplyr::n_distinct(.data[["part"]]) < 2
-        ) %>%
-        dplyr::ungroup() %>%
+        )
+
+        # don't just remove the cells with multiple parts
+        # dplyr::filter(dplyr::n_distinct(.data[["part"]]) < 2) %>%
+
+        # instead keep the part containing the largest number of vertices
+    geom_df %<>% dplyr::group_by(.data[["part"]], .data[["geom"]]) %>%
+    dplyr::mutate(num = dplyr::n()) %>%
+    dplyr::ungroup() %>% 
+    dplyr::group_by(.data[["geom"]]) %>%
+    dplyr::filter(num == max(num))
+
+     geom_df %<>% dplyr::ungroup() %>%
         dplyr::mutate(
             # create ID col
             cell_id = dplyr::consecutive_id(

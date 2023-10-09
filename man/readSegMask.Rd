@@ -25,7 +25,7 @@ c(xmin, xmax, ymin, ymax).}
 \item{assayName}{The name of the segmentation (e.g. cell, or nucleus),
 Default: 'cell'}
 
-\item{background_value}{The value corrisponding to the backgorund in the
+\item{background_value}{The value corresponding to the background in the
 segmentation, Default: NULL}
 
 \item{sample_id}{What the sample should be named, Default: NULL}
@@ -47,7 +47,8 @@ me <- readXenium(data,
     addBoundaries = NULL
 )
 boundaries(me, "BIDcell_segmentation") <- readSegMask(
-    extent(me), # use the molecule extent to define the boundary extent
+    # use the molecule extent to define the boundary extent
+    extent(me, assayName = "detected"),
     path = segMask, assayName = "BIDcell_segmentation",
     sample_id = "sample1", background_value = 0
 )
@@ -56,7 +57,7 @@ ggplot_me() +
         me,
         assayName = "BIDcell_segmentation", fill = NA, colour = "black"
     ) +
-    geom_point_me(me, byColour = "feature_name", size = 0.1) +
+    geom_point_me(me, byColour = "feature_id", size = 0.1) +
     geom_polygon_me(
         me,
         assayName = "BIDcell_segmentation", fill = NA, colour = "red"

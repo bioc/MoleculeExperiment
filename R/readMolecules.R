@@ -110,7 +110,7 @@ readMolecules <- function(dataDir,
 
         # standardise data format to ME list
         # goal = reduce redundancy and save storage space
-        mol_n[[f]] <- .standardise_to_list(mol_df, cols, "feature_name")
+        mol_n[[f]] <- .standardise_to_list(mol_df, cols, "feature_id")
     }
 
     # specify sample_ids
