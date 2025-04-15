@@ -1,6 +1,6 @@
 Package: MoleculeExperiment
 Title: Prioritising a molecule-level storage of Spatial Transcriptomics Data
-Version: 1.8.0
+Version: 1.9.0
 Authors@R: c(
     person("Bárbara Zita", "Peters Couto", email = "barbara.zita.peters@couto.de", role = c("aut")),
     person("Nicholas","Robertson", email = "nicholas.robertson@sydney.edu.au", role = c("aut")),
